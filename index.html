@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>斗六國小新生 QR Code 產生器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 90%;
+      max-width: 300px;
+      box-sizing: border-box;
+    }
+
+    #qr-container {
+      display: none;
+      position: relative;
+      margin: 20px auto;
+      width: 300px;
+      height: 300px;
+    }
+
+    #qrImage {
+      width: 100%;
+      height: 100%;
+    }
+
+    #qr-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: purple;
+      font-weight: bold;
+      font-size: 28px;
+      text-shadow: 1px 1px 2px white;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 500px) {
+      #qr-text {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>斗六國小新生姓名 QR Code 產生器</h2>
+
+  <input type="text" id="nameInput" placeholder="請輸入姓名" />
+  <br />
+  <button onclick="generateQR()">產生 QR Code</button>
+
+  <div id="qr-container">
+    <img id="qrImage" src="" alt="QR Code" />
+    <div id="qr-text"></div>
+  </div>
+
+  <script>
+    function generateQR() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) {
+        alert("請輸入姓名！");
+        return;
+      }
+
+      const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(name);
+
+      document.getElementById("qrImage").src = qrUrl;
+      document.getElementById("qr-text").innerText = name;
+      document.getElementById("qr-container").style.display = "block";
+    }
+  </script>
+</body>
+</html>
