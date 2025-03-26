@@ -17,17 +17,38 @@
       width: 80%;
       max-width: 300px;
       margin: 10px 0;
+      box-sizing: border-box;
+    }
+
+    #spinner {
+      display: none;
+      margin: 20px auto;
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     #result {
       margin-top: 30px;
       font-size: 32px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .number {
       color: red;
       font-size: 50px;
+      font-weight: bold;
+    }
+
+    b {
       font-weight: bold;
     }
   </style>
@@ -39,34 +60,42 @@
   <br />
   <button onclick="search()">查詢</button>
 
+  <div id="spinner"></div>
   <div id="result"></div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzQ7e-GlJa31tVGY-W9jacpFIobndYyE0pNLbKqEc3g2fJBSQntDph9oefkYMGUJu8_/exec"; // <== 請替換成 Apps Script 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbzQ7e-GlJa31tVGY-W9jacpFIobndYyE0pNLbKqEc3g2fJBSQntDph9oefkYMGUJu8_/exec";
 
     function search() {
       const name = document.getElementById("nameInput").value.trim();
+      const spinner = document.getElementById("spinner");
       const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "";
 
+      resultDiv.innerHTML = "";
       if (!name) {
         alert("請輸入姓名！");
         return;
       }
 
+      spinner.style.display = "block";
+
       fetch(`${API_URL}?name=${encodeURIComponent(name)}`)
         .then(res => res.json())
         .then(data => {
+          spinner.style.display = "none";
+
           if (data && data.流水號) {
             resultDiv.innerHTML =
               `您好，貴子弟 ${name} 序號為 <span class="number">${data.流水號}</span>，<br>` +
               `請將此號碼報給第2關老師以拿取您已填報之資料。<br>` +
-              `注意：此號碼為流水序號僅供查詢索引，非錄取順位。`;
+              `<b>注意：此號碼為流水序號僅供查詢索引，非錄取順位。</b>`;
           } else {
-            resultDiv.innerHTML = "查無此姓名，請確認是否輸入正確。";
+            resultDiv.innerHTML =
+              "查無此姓名，請確認是否輸入正確？<br>或有否完成線上登記表單？";
           }
         })
         .catch(() => {
+          spinner.style.display = "none";
           resultDiv.innerHTML = "查詢失敗，請稍後再試。";
         });
     }
