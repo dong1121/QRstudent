@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>斗六國小新生序號查詢</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    input, button {
+      font-size: 20px;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px 0;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 32px;
+      line-height: 1.5;
+    }
+
+    .number {
+      color: red;
+      font-size: 50px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>斗六國小新生序號查詢</h2>
+
+  <input type="text" id="nameInput" placeholder="請輸入學生姓名" />
+  <br />
+  <button onclick="search()">查詢</button>
+
+  <div id="result"></div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzQ7e-GlJa31tVGY-W9jacpFIobndYyE0pNLbKqEc3g2fJBSQntDph9oefkYMGUJu8_/exec"; // <== 請替換成 Apps Script 網址
+
+    function search() {
+      const name = document.getElementById("nameInput").value.trim();
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (!name) {
+        alert("請輸入姓名！");
+        return;
+      }
+
+      fetch(`${API_URL}?name=${encodeURIComponent(name)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.流水號) {
+            resultDiv.innerHTML =
+              `您好，貴子弟 ${name} 序號為 <span class="number">${data.流水號}</span>，<br>` +
+              `請將此號碼報給第2關老師以拿取您已填報之資料。<br>` +
+              `注意：此號碼為流水序號僅供查詢索引，非錄取順位。`;
+          } else {
+            resultDiv.innerHTML = "查無此姓名，請確認是否輸入正確。";
+          }
+        })
+        .catch(() => {
+          resultDiv.innerHTML = "查詢失敗，請稍後再試。";
+        });
+    }
+  </script>
+</body>
+</html>
