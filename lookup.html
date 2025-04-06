@@ -11,6 +11,12 @@
       padding: 30px;
     }
 
+    img.logo {
+      max-width: 150px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
     input, button {
       font-size: 20px;
       padding: 10px;
@@ -60,6 +66,9 @@
   </style>
 </head>
 <body>
+  <!-- 加入 Logo -->
+  <img src="dlps_logo.png" alt="斗六國小 Logo" class="logo" />
+
   <h2>斗六國小新生序號查詢</h2>
 
   <input type="text" id="nameInput" placeholder="請輸入學生姓名" />
@@ -90,18 +99,18 @@
         .then(data => {
           spinner.style.display = "none";
 
-          if (data && data.姓名) {  // 有找到姓名
-            if (data.流水號) {  // 有流水號
+          if (data && data.姓名) {
+            if (data.流水號) {
               resultDiv.innerHTML =
                 `您好，貴子弟 ${name} 序號為 <span class="number">${data.流水號}</span>，<br>` +
                 `請將此號碼報給第2關老師以拿取您已填報之資料。<br>` +
                 `<b>注意：此號碼為流水序號僅供查詢索引，非錄取順位。</b>`;
-            } else {  // 流水號為空
+            } else {
               resultDiv.innerHTML =
                 `您好，貴子弟 ${name}，<span class="warning">未完成線上填報資料</span>，<br>` +
                 `請無需排隊直接至201教室填寫基本資料後，再行排隊進行報到作業，謝謝您的配合！`;
             }
-          } else {  // 查無此姓名
+          } else {
             resultDiv.innerHTML =
               "查無此姓名，請確認姓名是否輸入正確，<br>若有難檢字不易輸入，可由第2關老師協助查詢。";
           }
